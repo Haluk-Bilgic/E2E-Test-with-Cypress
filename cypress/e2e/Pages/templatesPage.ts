@@ -42,4 +42,7 @@ export class TemplatesPage {
       }
     }
   }
+  selectBusinessGoal(businessGoal: string) {
+    cy.contains(businessGoal, { timeout: 20000 }).click();
+  }
 }

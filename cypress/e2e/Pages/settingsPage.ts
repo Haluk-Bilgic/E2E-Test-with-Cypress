@@ -4,6 +4,9 @@ export class SettingsPage {
   noVerifiedWebsiteModal = '[class*="NoVerifiedWebsiteModal_container"]';
   dataId = '[class="language-htmlbars"] span > span:nth-child(10)';
   customWebsiteEmbedCode = '[class*="Code_code"]';
+  verifyWebsiteButton = '[id="no-verified-modal-verify-button"]';
+  verificationLabel = '[class*="NoVerifiedWebsiteModal_label"]';
+  refreshButton = "Refresh";
 
   checkLayoutAndClickButton(domainFieldText: string, psButton: string) {
     cy.get(this.layoutDomainField).within(() => {
@@ -41,5 +44,30 @@ export class SettingsPage {
         }
       });
     });
+  }
+  verifyWebsite() {
+    cy.get(this.verifyWebsiteButton).click();
+  }
+  clickRefreshButton() {
+    cy.contains(this.refreshButton).click();
+  }
+  checkWebsiteIsVerified() {
+    let number = 0;
+
+    const reloadAndCheck = () => {
+      cy.get(this.verificationLabel).then((label) => {
+        if (label.text() == "Verified") {
+          return;
+        }
+        if (number == 10) {
+          cy.log("Tried 10 times to verify but Failed");
+          return;
+        }
+        number++;
+        cy.wait(1000);
+        this.clickRefreshButton();
+        reloadAndCheck();
+      });
+    };
   }
 }

@@ -10,6 +10,18 @@ module.exports = defineConfig({
     pathName: "About",
   },
   e2e: {
+    hideXHRInCommandLog: true,
+    defaultCommandTimeout: 6000,
+    includeShadowDom: true,
+    viewportHeight: 900,
+    viewportWidth: 1440,
+    chromeWebSecurity: false,
+    watchForFileChanges: false,
+    video: true,
+    retries: {
+      runMode: 1,
+      openMode: 0,
+    },
     setupNodeEvents(on, config) {
       let randomEmail: string = `test${Math.floor(
         Math.random() * 100000

@@ -1,6 +1,8 @@
+import { CustomizePage } from "../Pages/customizePage";
 import { DashboardPage } from "../Pages/dashboardPage";
 import { LoginPage } from "../Pages/loginPage";
 import { SettingsPage } from "../Pages/settingsPage";
+import { TargetPage } from "../Pages/targetPage";
 import { TemplatesPage } from "../Pages/templatesPage";
 
 const url = Cypress.env("baseUrl");
@@ -10,6 +12,8 @@ const loginPage = new LoginPage();
 const dashboardPage = new DashboardPage();
 const templatesPage = new TemplatesPage();
 const settingsPage = new SettingsPage();
+const customizePage = new CustomizePage();
+const targetPage = new TargetPage();
 
 const netlifyBase = "https://api.netlify.com/api/v1/";
 const netlifyToken = "68vlpTPInmNg5WmDkvIIC0IY9mea_5k-xHA85XA2jVs";
@@ -40,5 +44,14 @@ describe("E2E scenario from register to publish and display popup with Watermark
       netlifySiteId,
       netlifyToken
     );
+    settingsPage.verifyWebsite();
+    settingsPage.checkWebsiteIsVerified();
+    templatesPage.selectBusinessGoal("All Templates");
+    templatesPage.selectTemplate(this.data.templateName6);
+    customizePage.verifyTitle();
+    customizePage.displayAndCloseEmailToastMessage();
+    customizePage.goToPublishPage();
+    targetPage.clickPublishButton();
+    targetPage.successMessageIsVisible();
   });
 });
