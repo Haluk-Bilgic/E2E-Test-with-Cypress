@@ -1,5 +1,6 @@
 import { CustomizePage } from "../Pages/customizePage";
 import { DashboardPage } from "../Pages/dashboardPage";
+import { Generator } from "../Pages/generatorPage";
 import { LoginPage } from "../Pages/loginPage";
 import { SettingsPage } from "../Pages/settingsPage";
 import { TargetPage } from "../Pages/targetPage";
@@ -14,6 +15,7 @@ const templatesPage = new TemplatesPage();
 const settingsPage = new SettingsPage();
 const customizePage = new CustomizePage();
 const targetPage = new TargetPage();
+const generator = new Generator();
 
 const netlifyBase = "https://api.netlify.com/api/v1/";
 const netlifyToken = "68vlpTPInmNg5WmDkvIIC0IY9mea_5k-xHA85XA2jVs";
@@ -53,5 +55,21 @@ describe("E2E scenario from register to publish and display popup with Watermark
     customizePage.goToPublishPage();
     targetPage.clickPublishButton();
     targetPage.successMessageIsVisible();
+  });
+  it("Check Watermark and Popup are displayed with Smart Mode", () => {
+    cy.visit(`https://${myWebsite}/${pathName}`);
+    cy.wait(22000);
+    generator.checkPopupIsVisible();
+    generator.checkWatermarkIsDisplayed();
+  });
+  it("Check Popup is not displayed on home page", () => {
+    cy.visit(`https://${myWebsite}`);
+    generator.goForwardInTime();
+    generator.checkPopupIsNotExist();
+  });
+  it("Check Popup is not displayed on other pages without doing any user behaviour", () => {
+    cy.visit(`https://${myWebsite}/${pathName}`);
+    cy.wait(2000);
+    generator.checkPopupIsNotVisible();
   });
 });
