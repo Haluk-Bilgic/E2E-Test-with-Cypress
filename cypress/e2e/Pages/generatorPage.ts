@@ -14,12 +14,4 @@ export class Generator {
   checkPopupIsNotExist() {
     cy.get(this.canvasElement).should("not.exist");
   }
-  goForwardInTime() {
-    cy.clock();
-    cy.reload();
-    cy.wait(1000);
-    cy.tick(11000);
-    cy.tick(11000);
-    cy.clock().invoke("restore");
-  }
 }

@@ -12,6 +12,11 @@ export class DashboardPage {
   campaignCardActionButton = "[id*='menu-button']";
   deleteSubButton = "Delete";
   deletButtonInModal = "#delete-campaign-modal-delete-button";
+  campaignsButton = "[id=dashboard-left-menu-campaign]";
+  infoPanel = "[id='user-info-panel']";
+  accountTitle = "Account - Popupsmart";
+  accountMailTextbox = '[id="email"]';
+  checkBoxAccount = "[type*=checkbox]";
 
   verifyTitle() {
     cy.title({ timeout: 15000 }).should("eq", this.title);
@@ -61,5 +66,25 @@ export class DashboardPage {
       });
     };
     deleteCamp();
+  }
+  clickCampaignsPage() {
+    cy.get(this.campaignsButton).first().click();
+  }
+  openUserInfoPanel() {
+    cy.get(this.infoPanel).click();
+  }
+  clickButtonFromPanel(panelButton: string) {
+    cy.contains(panelButton).clickForce();
+  }
+  deleteAccount(myEmail: string) {
+    cy.contains("Delete your account").clickForce();
+    cy.title().should("eq", this.accountTitle);
+    cy.get(this.checkBoxAccount).first().check();
+    cy.get(this.checkBoxAccount).last().check();
+    cy.contains("Delete my account").click();
+    cy.contains("Continue").click();
+    cy.get(this.accountMailTextbox).type(myEmail);
+    cy.contains("Delete Account").click();
+    this.loginPage.verifyTitle();
   }
 }

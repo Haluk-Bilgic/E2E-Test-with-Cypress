@@ -1,3 +1,4 @@
+import { BrowserUtils } from "../../support/browserUtils";
 import { CustomizePage } from "../Pages/customizePage";
 import { DashboardPage } from "../Pages/dashboardPage";
 import { Generator } from "../Pages/generatorPage";
@@ -16,6 +17,7 @@ const settingsPage = new SettingsPage();
 const customizePage = new CustomizePage();
 const targetPage = new TargetPage();
 const generator = new Generator();
+const browserUtils = new BrowserUtils();
 
 const netlifyBase = "https://api.netlify.com/api/v1/";
 const netlifyToken = "68vlpTPInmNg5WmDkvIIC0IY9mea_5k-xHA85XA2jVs";
@@ -64,12 +66,25 @@ describe("E2E scenario from register to publish and display popup with Watermark
   });
   it("Check Popup is not displayed on home page", () => {
     cy.visit(`https://${myWebsite}`);
-    generator.goForwardInTime();
+    browserUtils.goForwardInTime();
     generator.checkPopupIsNotExist();
   });
   it("Check Popup is not displayed on other pages without doing any user behaviour", () => {
     cy.visit(`https://${myWebsite}/${pathName}`);
     cy.wait(2000);
     generator.checkPopupIsNotVisible();
+  });
+  it("Delete Account", () => {
+    cy.task("getEmail").then((randomEmail) => {
+      cy.visit(url);
+      loginPage.entermail(randomEmail as string);
+      loginPage.enterPassword(myPassword);
+      loginPage.clicksubmit();
+      dashboardPage.clickCampaignsPage();
+      dashboardPage.verifyTitle();
+      dashboardPage.openUserInfoPanel();
+      dashboardPage.clickButtonFromPanel("Personal Data");
+      dashboardPage.deleteAccount(randomEmail as string);
+    });
   });
 });
